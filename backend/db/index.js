@@ -8,10 +8,10 @@ const initializeDatabase = async () => {
   try {
     const connection = await connect(mongoURI, {});
     if (connection) {
-      console.log('Connected Successfully');
+      console.log('Connected Successfully'.underline.bold.bgYellow);
     }
   } catch (error) {
-    console.log('Connection Failed', error);
+    console.log('Connection Failed', error.bgRed);
   }
 };
 
