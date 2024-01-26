@@ -1,9 +1,20 @@
+import { Route, Routes } from 'react-router-dom';
+import PrivateRoute from './containers/components/PrivateRoute';
+import Home from './containers/Home/Loadable';
 
 function App() {
-
   return (
     <>
-      <div>hello</div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
     </>
   );
 }
