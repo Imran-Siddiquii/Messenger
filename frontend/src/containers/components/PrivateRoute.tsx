@@ -1,16 +1,13 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { getToken } from '../../utils';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectUserToken } from '../Auth/slice/selector';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
-  const navigate = useNavigate();
-  React.useEffect(() => {
-    if (!getToken()) {
-      navigate('/login');
-    }
-  },[]);
+  const userToken = useSelector(selectUserToken);
 
-  return <>{children}</>;
+  return userToken || getToken() ? children : <Navigate to="/login" />;
 };
 
 export default PrivateRoute;
