@@ -24,7 +24,7 @@ const signUpController = async (req, res) => {
       const savedUser = await new User(user);
       await savedUser.save();
       // creating a token
-      const access_token = sign({ userID: savedUser._id }, secretKey);
+      const access_token = sign({ id: savedUser._id }, secretKey);
       //remove password key
       const { _id, name, phone_number, profile_picture, createdAt, updatedAt } =
         savedUser;
@@ -60,7 +60,7 @@ const loginController = async (req, res) => {
     if (checkPassword) {
       // creating token
       const { _id, name, profile_picture } = userExists;
-      const access_token = sign({ userID: userExists._id }, secretKey);
+      const access_token = sign({ id: userExists._id }, secretKey);
       return res.json({
         message: 'login successful',
         user: { _id, name, profile_picture },
