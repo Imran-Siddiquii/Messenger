@@ -8,7 +8,7 @@ const secretKey = process.env.SECRET_KEY;
 const signUpController = async (req, res) => {
   const body = req.body;
   if (Object.keys(body).length < 1) {
-   return res.json({ message: 'Please fill the fields' });
+    return res.status(400).json({ message: 'Please fill the fields' });
   }
   try {
     const userList = await User.find({});
@@ -25,20 +25,32 @@ const signUpController = async (req, res) => {
       await savedUser.save();
       // creating a token
       const access_token = sign({ userID: savedUser._id }, secretKey);
-      res.json({ message: 'Registration Successful', access_token });
+      //remove password key
+      const { _id, name, phone_number, profile_picture, createdAt, updatedAt } =
+        savedUser;
+      const newUser = {
+        _id,
+        name,
+        phone_number,
+        profile_picture,
+        createdAt,
+        updatedAt,
+      };
+
+      res.json({
+        message: 'Registration Successful',
+        access_token,
+        user: newUser,
+      });
     }
   } catch (error) {
-    console.log("🚀 ~ signUpController ~ error:", error)
-    res.status(400).json({ error:error.message });
+    res.status(400).json({ error: error.message });
   }
 };
 
 const loginController = async (req, res) => {
   const { phone_number, password } = req.body;
-  const userList = await User.find({});
-  const userExists = userList.find(
-    (user) => user.phone_number == phone_number.toLowerCase()
-  );
+  const userExists = await User.findOne({ phone_number });
 
   if (!userExists) {
     return res.status(401).json({ message: 'User not found' });
@@ -47,10 +59,13 @@ const loginController = async (req, res) => {
     const checkPassword = await compare(password, userExists.password);
     if (checkPassword) {
       // creating token
-      const access_token = sign({ userID: userExists._id }, secretKey, {
-        expiresIn: '24h',
+      const { _id, name, profile_picture } = userExists;
+      const access_token = sign({ userID: userExists._id }, secretKey);
+      return res.json({
+        message: 'login successful',
+        user: { _id, name, profile_picture },
+        access_token,
       });
-      return res.json({ message: 'login successful', access_token });
     } else {
       return res.status(400).json({ message: 'Wrong password' });
     }

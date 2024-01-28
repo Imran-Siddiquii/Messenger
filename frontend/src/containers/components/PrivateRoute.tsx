@@ -1,9 +1,16 @@
-import { ReactNode } from 'react';
-import Auth from '../Auth/Loadable';
+import React, { ReactNode } from 'react';
+import { getToken } from '../../utils';
+import { useNavigate } from 'react-router-dom';
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
-  const value: boolean = false;
-  return value ? children : <Auth />;
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (!getToken()) {
+      navigate('/login');
+    }
+  },[]);
+
+  return <>{children}</>;
 };
 
 export default PrivateRoute;

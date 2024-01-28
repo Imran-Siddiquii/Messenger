@@ -1,6 +1,5 @@
 import * as React from 'react';
 import SwipeableViews from 'react-swipeable-views';
-import { useTheme } from '@mui/material/styles';
 import {
   AppBar,
   Tabs,
@@ -10,7 +9,11 @@ import {
   Container,
   Grid,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { TabPanelProps } from './types';
+import { useSelector } from 'react-redux';
+import { selectUserToken } from './slice/selector';
+import { useNavigate } from 'react-router-dom';
 
 const LaodableLogin = React.lazy(() => import('../components/Login'));
 const LaodableSignIn = React.lazy(() => import('../components/SignIn'));
@@ -56,6 +59,13 @@ function a11yProps(index: number) {
 function Auth() {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
+  const navigate = useNavigate();
+  const userToken = useSelector(selectUserToken);
+  React.useEffect(() => {
+    if (userToken) {
+      navigate('/');
+    }
+  }, [userToken]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -75,7 +85,7 @@ function Auth() {
         justifyContent="center"
         style={{ minHeight: '60vh' }}
       >
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12} width="600px">
+        <Grid item xs={12} width="600px">
           <Box
             sx={{
               bgcolor: 'background.paper',

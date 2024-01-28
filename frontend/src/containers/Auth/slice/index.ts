@@ -1,10 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { AuthInitialState, LoginAction, SignInAction } from '../types';
+import { saveToken } from '../../../utils';
 
 const initialState: AuthInitialState = {
   loading: false,
   error: false,
   user: {},
+  token: '',
   message: '',
 };
 
@@ -12,27 +14,57 @@ const AuthSlice = createSlice({
   name: 'Auth',
   initialState,
   reducers: {
-    login: (_: AuthInitialState, action: PayloadAction<LoginAction>): void => {
-      console.log(action, 'akkfnadjns');
+    login: (
+      state: AuthInitialState,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _action: PayloadAction<LoginAction>,
+    ): void => {
+      state.loading = true;
+      state.message = '';
     },
-    signIn: (_: AuthInitialState, action: PayloadAction<SignInAction>) => {
-      console.log('🚀 ~ action:', action);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    signIn: (state: AuthInitialState, _action: PayloadAction<SignInAction>) => {
+      state.loading = true;
+      state.message = '';
     },
     loginSuccess: (state: AuthInitialState, action) => {
-      console.log('🚀 ~ state:', state);
-      console.log('🚀 ~ action:', action);
+      saveToken(action.payload.access_token);
+      state = {
+        loading: false,
+        error: false,
+        message: action.payload.message,
+        user: action.payload.user,
+        token: action.payload.access_token,
+      };
+      return state;
     },
     loginFailure: (state, action) => {
-      console.log('🚀 ~ state:', state);
-      console.log('🚀 ~ action:', action);
+      state = {
+        ...state,
+        loading: false,
+        error: false,
+        message: action.payload.message,
+      };
+      return state;
     },
     signInSuccess: (state: AuthInitialState, action) => {
-      console.log('🚀 ~ state:', state);
-      console.log(action, 'chekckk');
+      saveToken(action.payload.access_token);
+      state = {
+        loading: false,
+        error: false,
+        message: action.payload.message,
+        user: action.payload.user,
+        token: action.payload.access_token,
+      };
+      return state;
     },
     signInFailuer: (state: AuthInitialState, action) => {
-      console.log('🚀 ~ state:', state);
-      console.log(action, 'chekckk');
+      state = {
+        ...state,
+        loading: false,
+        error: false,
+        message: action.payload.message,
+      };
     },
   },
 });

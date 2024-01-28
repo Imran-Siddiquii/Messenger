@@ -2,6 +2,7 @@ export interface AuthInitialState {
   loading: boolean;
   error: boolean;
   user: any;
+  token:string,
   message: string;
 }
 

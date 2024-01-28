@@ -45,7 +45,6 @@ const SignIn = () => {
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     dispatch(signIn({ payload: formdata }));
-    console.table(formdata);
   };
   return (
     <div>
