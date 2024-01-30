@@ -6,7 +6,7 @@ const chatModel = Schema(
       type: String,
       trim: true,
     },
-    isGroupAdmin: {
+    isGroupChat: {
       type: Boolean,
       default: false,
     },
@@ -16,7 +16,7 @@ const chatModel = Schema(
         ref: 'User',
       },
     ],
-    lastmessage: {
+    lastestMessage: {
       type: Schema.Types.ObjectId,
       ref: 'Message',
     },
