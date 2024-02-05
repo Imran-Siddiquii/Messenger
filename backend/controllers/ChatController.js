@@ -17,12 +17,12 @@ const accessChat = async (req, res) => {
     ],
   })
     .populate('users', '-password')
-    .populate('lastestMessage');
+    .populate('latestMessage');
 
   // is exists then populate user details without password
 
   isChat = await User.populate(isChat, {
-    path: 'lastestMessage.sender',
+    path: 'latestMessage.sender',
     select: 'name pic phone_number',
   });
 
@@ -49,4 +49,52 @@ const accessChat = async (req, res) => {
   }
 };
 
-export { accessChat };
+const fetchChat = async (req, res) => {
+  try {
+    await Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+      .populate('users', '-password')
+      .populate('groupAdmin', '-password')
+      .populate('latestMessage')
+      .sort({ updatedAt: -1 })
+      .then(async (results) => {
+        results = await User.populate(results, {
+          path: 'latest.sender',
+          select: 'name pic',
+        });
+        res.status(200).send(results);
+      });
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+const createGroupChat = async (req, res) => {
+  if (!req.body.name || !req.body.users) {
+    res.status(401).json({ message: 'Please fill all the fields' });
+  }
+  const users = JSON.parse(req.body.users);
+
+  if (users.length < 2) {
+    res
+      .status(401)
+      .json({ message: 'Atleast 2 members required to make a group' });
+  }
+  users.push(req.user);
+  try {
+    const groupChat = await Chat.create({
+      chat: req.body.name,
+      isGroupChat: true,
+      users: users,
+      groupAdmin: req.user,
+    });
+    const fullGroupChat = await Chat.find({ _id: groupChat._id })
+      .populate('users', '-password')
+      .populate('groupAdmin', '-password');
+
+    res.status(200).send(fullGroupChat);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export { accessChat, fetchChat, createGroupChat };
