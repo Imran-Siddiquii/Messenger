@@ -97,4 +97,64 @@ const createGroupChat = async (req, res) => {
   }
 };
 
-export { accessChat, fetchChat, createGroupChat };
+const addGroupMember = async (req, res) => {
+  const { groupId, userId } = req.body;
+
+  if (!groupId || !userId) {
+    res.send('Please fill all the fields');
+  }
+  const addMember = await Chat.findByIdAndUpdate(
+    groupId,
+    { $push: { users: userId } },
+    { new: true }
+  )
+    .populate({
+      path: 'users',
+      match: { _id: { $ne: req.user._id } }, // Exclude the user being removed
+      select: '-password',
+    })
+    .populate('groupAdmin', '-password');
+  res.send(addMember);
+};
+
+const removeGroupMember = async (req, res) => {
+  const { groupId, userId } = req.body;
+
+  if (!groupId || !userId) {
+    res.send('Please fill all the fields');
+  }
+  const removeMember = await Chat.findByIdAndUpdate(
+    groupId,
+    { $pull: { users: userId } },
+    { new: true }
+  )
+    .populate({
+      path: 'users',
+      match: { _id: { $ne: req.user._id } }, // Exclude the user being removed
+      select: '-password',
+    })
+    .populate('groupAdmin', '-password');
+  res.send(removeMember);
+};
+
+const renameGroup = async (req, res) => {
+  const { groupId, chatName } = req.body;
+  if (!groupId || !chatName) {
+    res.send('Please fill all the fields');
+  }
+  const updated = await Chat.findByIdAndUpdate(
+    groupId,
+    { chat: chatName },
+    { new: true }
+  );
+
+  res.send(updated);
+};
+export {
+  accessChat,
+  fetchChat,
+  createGroupChat,
+  addGroupMember,
+  removeGroupMember,
+  renameGroup,
+};

@@ -1,5 +1,12 @@
 import { Router } from 'express';
-import { accessChat, createGroupChat, fetchChat } from '../controllers/ChatController.js';
+import {
+  accessChat,
+  addGroupMember,
+  createGroupChat,
+  fetchChat,
+  removeGroupMember,
+  renameGroup,
+} from '../controllers/ChatController.js';
 import { authVerify } from '../middlewares/authVerify.js';
 
 const chatRoutes = Router();
@@ -8,5 +15,8 @@ const chatRoutes = Router();
 chatRoutes.post('/', authVerify, accessChat);
 chatRoutes.get('/', authVerify, fetchChat);
 chatRoutes.post('/group', authVerify, createGroupChat);
+chatRoutes.post('/group/add-member', authVerify, addGroupMember);
+chatRoutes.post('/group/remove-member', authVerify, removeGroupMember);
+chatRoutes.post('/group/rename', authVerify, renameGroup);
 
 export default chatRoutes;
