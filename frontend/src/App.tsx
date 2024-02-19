@@ -4,7 +4,6 @@ import Home from './containers/Home/Loadable';
 import Auth from './containers/Auth/Loadable';
 
 function App() {
-  
   return (
     <>
       <Routes>

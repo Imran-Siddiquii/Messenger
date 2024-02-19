@@ -5,6 +5,7 @@ import { CssBaseline } from '@mui/material';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store/index';
+import './global.css';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.Fragment>
     <Provider store={store}>
