@@ -15,6 +15,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import ProfileModal from './ProfileModal';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -58,6 +59,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 function Header() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [profileModal, setProfileModal] = React.useState<boolean>(false);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
 
@@ -81,6 +83,10 @@ function Header() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  // handle profile modal close
+  const handleProfileModal = () => setProfileModal(true);
+  const handleModalClose = () => setProfileModal(false);
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -98,7 +104,7 @@ function Header() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleProfileModal}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
@@ -226,6 +232,7 @@ function Header() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      <ProfileModal open={profileModal} handleClose={handleModalClose} />
     </Box>
   );
 }
