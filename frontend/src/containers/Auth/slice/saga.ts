@@ -7,20 +7,7 @@ import {
   signInFailuer,
   signInSuccess,
 } from './index'; // Assuming you have success and failure actions
-
-// Your async login function, replace with your actual login API call
-
-const apiRequest = async (credentials: any, request: string) => {
-  // Perform your login API call here and return the result
-  const response = await fetch(`http://localhost:3000/api/v1/${request}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(credentials.payload),
-  });
-  return response;
-};
+import { apiRequest } from '../../../utils/apiRequest';
 
 async function convertToJson(response: any) {
   return await response.json();
@@ -28,7 +15,12 @@ async function convertToJson(response: any) {
 // Saga worker function
 function* loginWorker(action: any): Generator<any, void, any> {
   try {
-    const result = yield call(apiRequest, action.payload, 'login'); // Assuming payload contains login credentials
+    const result = yield call(
+      apiRequest,
+      'POST',
+      'login',
+      action.payload.value,
+    ); // Assuming payload contains login credentials
     const response = yield call(convertToJson, result);
 
     if (result.status === 200) {
@@ -44,7 +36,12 @@ function* loginWorker(action: any): Generator<any, void, any> {
 // Saga worker function
 function* signInWorker(action: any): Generator<any, void, any> {
   try {
-    const result = yield call(apiRequest, action.payload, 'signup');
+    const result = yield call(
+      apiRequest,
+      'POST',
+      'signup',
+      action.payload.value,
+    );
     const response = yield call(convertToJson, result); // Assuming payload contains login credentials
     if (result.status === 200) {
       yield put(signInSuccess(response));

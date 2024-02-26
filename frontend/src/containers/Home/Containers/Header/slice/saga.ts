@@ -1,28 +1,25 @@
-import { all, takeLatest } from 'redux-saga/effects';
-import { searchUser } from './index'; // Assuming you have another action to watch for
+import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { searchUser, searchUserFailed, searchUserSuccessful } from './index'; // Assuming you have another action to watch for
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import { apiRequest } from '../../../../../utils/apiRequest';
+
+async function convertToJson(response: any) {
+  return await response.json();
+}
 
 function* userSearchWorker(
   action: ActionCreatorWithPayload<{
     value: string;
   }>,
 ): Generator<any, void, any> {
-  console.log('🚀 ~ function*userSearchWorker ~ action:', action);
-
-  const result = yield;
-  console.log('🚀 ~ function*userSearchWorker ~ result:', result);
-
-  // try {
-  //   // const result = yield call(apiRequest, action.payload, 'signup');
-  //   const response = yield call(convertToJson, result); // Assuming payload contains login credentials
-  //   if (result.status === 200) {
-  //     yield put(signInSuccess(response));
-  //   } else {
-  //     yield put(signInFailuer(response));
-  //   }
-  // } catch (error) {
-  //   yield put(signInFailuer(error));
-  // }
+  try {
+    const result = yield call(apiRequest, 'POST', 'user?search=', null, action);
+    const response = yield call(convertToJson, result); // Assuming payload contains login credentials
+    yield put(searchUserSuccessful({ value: response }));
+  } catch (error) {
+    console.log(error);
+    yield put(searchUserFailed({ value: true }));
+  }
 }
 
 function* headerSaga() {

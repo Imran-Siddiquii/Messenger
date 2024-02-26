@@ -1,6 +1,6 @@
 import { Add } from '@mui/icons-material';
 import { Box, Button, Grid, Typography } from '@mui/material';
-import UserList from '../../../components/UserList';
+// import UserList from '../../../components/UserList';
 
 function ChatList() {
   return (
@@ -16,7 +16,7 @@ function ChatList() {
             Add new chat
           </Button>
         </Grid>
-        <UserList/>
+        {/* <UserList/> */}
       </Box>
     </>
   );

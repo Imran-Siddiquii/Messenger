@@ -1,6 +1,9 @@
 import { Box, Typography } from '@mui/material';
 
-const UserList = () => {
+interface Props {
+  user: any;
+}
+const UserList = ({ user }: Props) => {
   return (
     <Box
       mt={4}
@@ -23,9 +26,9 @@ const UserList = () => {
           overflowY: 'auto',
         }}
       >
-        <Typography variant="h5">Name</Typography>
+        <Typography variant="h5">{user?.name}</Typography>
         <Typography component="span" fontWeight={600}>
-          user name : last message
+          last message : {user?.lastMessage}
         </Typography>
       </Box>
     </Box>

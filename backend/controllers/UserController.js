@@ -9,10 +9,14 @@ const searchUser = async (req, res) => {
         ],
       }
     : {};
-  const users = await User.find(keyword)
-    .find({ _id: { $ne: req.user._id } })
-    .select('-password');
-  res.send(users);
+  if (Object.keys(keyword)?.length > 0) {
+    const users = await User.find(keyword)
+      .find({ _id: { $ne: req.user._id } })
+      .select('-password');
+    res.send(users);
+  } else {
+    res.status(204).send();
+  }
 };
 
 export { searchUser };

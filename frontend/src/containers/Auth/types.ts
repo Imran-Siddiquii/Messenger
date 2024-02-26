@@ -16,11 +16,11 @@ export interface SignInFormType extends LoginFormType {
 }
 
 export interface LoginAction {
-  payload: LoginFormType;
+  value: LoginFormType;
 }
 
 export interface SignInAction {
-  payload:SignInFormType
+  value:SignInFormType
 }
 
 

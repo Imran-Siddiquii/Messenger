@@ -45,7 +45,7 @@ const Login = () => {
   // handle submit
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    dispatch(login({ payload: formdata }));
+    dispatch(login({ value: formdata }));
   };
   return (
     <Box>
