@@ -28,7 +28,7 @@ const UserList = ({ user }: Props) => {
       >
         <Typography variant="h5">{user?.name}</Typography>
         <Typography component="span" fontWeight={600}>
-          last message : {user?.lastMessage}
+          Number : {user?.phone_number}
         </Typography>
       </Box>
     </Box>

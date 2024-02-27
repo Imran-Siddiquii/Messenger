@@ -11,7 +11,7 @@ export const apiRequest = async (
   if (action) {
     apiUrl += `${action.payload.value}`;
   } else {
-    apiUrl = '';
+    apiUrl += '';
   }
 
   // Perform your login API call here and return the result
