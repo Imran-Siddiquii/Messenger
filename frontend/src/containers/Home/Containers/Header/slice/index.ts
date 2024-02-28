@@ -25,6 +25,9 @@ const HeaderContainer = createSlice({
       state.loading = false;
       state.data = action.payload.value;
     },
+    searchUserEmpty:(state:HeaderContainerType,action:PayloadAction<string>)=>{
+      state.searchValue=action.payload
+    },
     searchUserFailed: (
       state: HeaderContainerType,
       action: PayloadAction<{ value: boolean }>,
@@ -35,7 +38,7 @@ const HeaderContainer = createSlice({
   },
 });
 
-export const { searchUser, searchUserSuccessful, searchUserFailed } =
+export const { searchUser, searchUserSuccessful, searchUserFailed, searchUserEmpty } =
   HeaderContainer.actions;
 
 export default HeaderContainer.reducer;

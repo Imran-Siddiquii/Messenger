@@ -1,20 +1,38 @@
-import { Box, Grid } from '@mui/material';
+import { Box, CircularProgress, Grid } from '@mui/material';
 import UserList from '../../../components/UserList';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   selectSearchLoading,
   selectSearchUserData,
 } from '../Header/slice/selector';
+import { accessChat } from '../ChatList/slice';
 
 const SearchUserList = () => {
   const searchUser: any[] = useSelector(selectSearchUserData);
   const loading: boolean = useSelector(selectSearchLoading);
+  const dispatch = useDispatch();
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const handleAccessChat = (id: string) => {
+    dispatch(accessChat({ userId: id }));
+  };
 
-  const userList = (list: any) => <UserList user={list} key={list._id} />;
+  const userList = (list: any) => (
+    <UserList handleAccessChat={handleAccessChat} user={list} key={list._id} />
+  );
+
+  if (loading)
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          height: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <Box>
