@@ -50,22 +50,24 @@ const accessChat = async (req, res) => {
 };
 
 const fetchChat = async (req, res) => {
-  try {
-    await Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
-      .populate('users', '-password')
-      .populate('groupAdmin', '-password')
-      .populate('latestMessage')
-      .sort({ updatedAt: -1 })
-      .then(async (results) => {
-        results = await User.populate(results, {
-          path: 'latest.sender',
-          select: 'name pic',
-        });
-        res.status(200).send(results);
-      });
-  } catch (error) {
-    throw new Error(error.message);
-  }
+   try {
+     await Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
+       .populate('users', '-password')
+       .populate('groupAdmin', '-password')
+       .populate('latestMessage')
+       .sort({ updatedAt: -1 })
+       .then(async (results) => {
+         results = await User.populate(results, {
+           path: 'latestMessage.sender',
+           select: 'name pic',
+         });
+         res.status(200).send(results);
+       });
+   } catch (error) {
+     res.status(400);
+     throw new Error(error.message);
+   }
+
 };
 
 const createGroupChat = async (req, res) => {

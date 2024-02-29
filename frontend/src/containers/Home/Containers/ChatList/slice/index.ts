@@ -5,35 +5,38 @@ export const initialState: ChatListType = {
   loading: false,
   chatList: [],
   error: false,
-  selectedUserChat: '',
+  selectedUserChat: {},
 };
 const chatList = createSlice({
   name: 'chatList',
   initialState,
   reducers: {
-    accessChat: (
-      state: ChatListType,
-      action: PayloadAction<{ userId: string }>,
-    ) => {
+    accessChat: (state: ChatListType) => {
       state.loading = true;
-      state.selectedUserChat = action.payload.userId;
+    },
+    selectedChat: (
+      state: ChatListType,
+      action: PayloadAction<{ user: any }>,
+    ) => {
+      state.selectedUserChat = action.payload.user;
     },
     accessChatSuccessful: (
       state: ChatListType,
       action: PayloadAction<{ value: any }>,
     ) => {
-    state.loading = false;
-    const existingIndex = state.chatList.findIndex(
-      (user) => user._id === action.payload.value._id,
-    );
+      state.loading = false;
+      state.selectedUserChat = action.payload.value;
+      const existingIndex = state.chatList.findIndex(
+        (user) => user._id === action.payload.value._id,
+      );
 
-    if (existingIndex !== -1) {
-      // Remove the existing user
-      state.chatList.splice(existingIndex, 1);
-    }
+      if (existingIndex !== -1) {
+        // Remove the existing user
+        state.chatList.splice(existingIndex, 1);
+      }
 
-    // Add the user to the beginning of the list
-    state.chatList = [action.payload.value, ...state.chatList];
+      // Add the user to the beginning of the list
+      state.chatList = [action.payload.value, ...state.chatList];
     },
     fetchUserChatList: (
       state: ChatListType,
@@ -59,6 +62,7 @@ const chatList = createSlice({
 });
 
 export const {
+  selectedChat,
   fetchUserChatList,
   userChatListSuccessful,
   userChatListFailed,

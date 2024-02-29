@@ -2,8 +2,17 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import { useSelector } from 'react-redux';
+import { selectSelectedChat } from '../ChatList/slice/selector';
+import React, { useEffect } from 'react';
 
 const ChatBox = () => {
+  const selectChat = useSelector(selectSelectedChat);
+  const [chat, setChat] = React.useState<any>();
+  useEffect(() => {
+    setChat(selectChat);
+  }, [selectChat]);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <div
@@ -16,7 +25,9 @@ const ChatBox = () => {
           alignItems: 'center',
         }}
       >
-        <div>User Name</div>
+        {chat && Object.keys(chat).length > 0 && (
+          <div>{chat?.users[1]?.name}</div>
+        )}
         {/* You can replace 'User Name' with the actual user's name */}
       </div>
       <div style={{ flexGrow: 1, overflowY: 'auto', padding: '8px' }}>
@@ -26,7 +37,7 @@ const ChatBox = () => {
         {chatMessages.map((message, index) => (
           ))}
         */}
-        <div  style={{ marginBottom: '8px' }}>  'dff'</div>
+        <div style={{ marginBottom: '8px' }}> 'dff'</div>
       </div>
       <div
         style={{

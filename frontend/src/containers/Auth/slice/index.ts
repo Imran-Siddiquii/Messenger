@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { AuthInitialState, LoginAction, SignInAction } from '../types';
-import { saveToken } from '../../../utils';
+import { saveToken, saveUser } from '../../../utils';
 
 const initialState: AuthInitialState = {
   loading: false,
@@ -29,6 +29,7 @@ const AuthSlice = createSlice({
     },
     loginSuccess: (state: AuthInitialState, action) => {
       saveToken(action.payload.access_token);
+      saveUser(action.payload.user);
       state = {
         loading: false,
         error: false,
@@ -49,6 +50,7 @@ const AuthSlice = createSlice({
     },
     signInSuccess: (state: AuthInitialState, action) => {
       saveToken(action.payload.access_token);
+      saveUser(action.payload.user);
       state = {
         loading: false,
         error: false,

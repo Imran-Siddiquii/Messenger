@@ -1,13 +1,13 @@
 import { Box, Typography } from '@mui/material';
 
 interface Props {
-  handleAccessChat: (id: string) => void;
+  handleAccessChat?: (id: string) => void | undefined;
   user: any;
 }
 const UserList = ({ user, handleAccessChat }: Props) => {
   return (
     <Box
-      mt={4}
+      mt={1}
       border={'1px solid #d2ebff'}
       borderRadius={'5px'}
       sx={{
@@ -15,7 +15,7 @@ const UserList = ({ user, handleAccessChat }: Props) => {
         maxHeight: '80vh',
         overflowY: 'auto',
       }}
-      onClick={() => handleAccessChat(user._id)}
+      onClick={() => handleAccessChat && handleAccessChat(user._id)}
     >
       <Box
         m={1}
