@@ -7,12 +7,15 @@ import {
 } from '../Header/slice/selector';
 import { accessChat } from '../ChatList/slice';
 
-const SearchUserList = () => {
+interface SearchUserListProps {
+  handleCloseDrawer: (value: boolean) => void;
+}
+const SearchUserList = ({ handleCloseDrawer }: SearchUserListProps) => {
   const searchUser: any[] = useSelector(selectSearchUserData);
   const loading: boolean = useSelector(selectSearchLoading);
   const dispatch = useDispatch();
-
   const handleAccessChat = (id: string) => {
+    handleCloseDrawer(false);
     dispatch(accessChat({ userId: id }));
   };
 

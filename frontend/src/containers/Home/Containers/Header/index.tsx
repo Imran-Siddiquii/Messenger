@@ -24,9 +24,10 @@ function Header() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
 
-  const [showSearchBar, setShowSearchBar] = React.useState<boolean>(false);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const [openDrawer, setOpenDrawer] = React.useState<boolean>(false);
 
   const handleProfileMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
@@ -46,8 +47,6 @@ function Header() {
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>): void => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
-
-  const handleMobileSearch = () => setShowSearchBar(true);
 
   // handle profile modal close
   const handleProfileModal = () => setProfileModal(true);
@@ -132,15 +131,15 @@ function Header() {
       <AppBar position="static">
         <Toolbar>
           <SearchBar
-            showSearchBar={showSearchBar}
-            setShowSearchBar={setShowSearchBar}
+            openDrawer={openDrawer}
+            setOpenDrawer={setOpenDrawer}
           />
-          <Box onClick={handleMobileSearch}>
+          <Box onClick={() => setOpenDrawer(true)}>
             <IconButton
               sx={{
                 color: '#fff',
                 paddingTop: '14px',
-                display: { xs: showSearchBar ? 'none' : 'block', sm: 'none' },
+                display: { xs: 'block', sm: 'none' },
               }}
             >
               <SearchIcon />
