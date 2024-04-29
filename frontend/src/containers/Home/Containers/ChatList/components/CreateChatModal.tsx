@@ -3,10 +3,21 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, Chip, TextField } from '@mui/material';
+import {
+  Button,
+  Chip,
+  List,
+  ListItem,
+  TextField,
+} from '@mui/material';
 import React from 'react';
 import { debounce } from 'lodash';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { searchUser, searchUserEmpty } from '../../Header/slice';
+import {
+  selectSearchUserData,
+  selectSearchValue,
+} from '../../Header/slice/selector';
 interface Props {
   handleClose: () => void;
 }
@@ -20,20 +31,50 @@ function CreateChatModal({ handleClose }: Props) {
     users: [],
   });
   const dispatch = useDispatch();
+  const searchValue = useSelector(selectSearchValue);
+  const searchedUser = useSelector(selectSearchUserData);
+
+  React.useEffect(() => {
+    dispatch(searchUserEmpty(''));
+  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event?.target.name, event?.target.value);
+    event.preventDefault();
+    const { name, value } = event.target;
+    setGroupDetails((pre) => ({
+      ...pre,
+      [name]: value,
+    }));
   };
 
   // debouncing method while seach the user
   const onSearch = React.useMemo(
     () =>
       debounce((event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.value);
-        // dispatch(searchUser({ value: event.target.value }));
+        dispatch(searchUser({ value: event.target.value }));
       }, 300),
+
     [dispatch],
   );
+
+  const handleClickList = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    list: any,
+  ) => {
+    event.preventDefault();
+    setGroupDetails((pre) => {
+      return {
+        ...pre,
+        users: [...pre.users, list],
+      };
+    });
+  };
+
+  console.log('🚀 ~ CreateChatModal ~ groupDetails:', groupDetails);
+
+  const handleCreateGroup=()=>{
+    console.log('🚀 ~ CreateChatModal ~ groupDetails:', groupDetails);
+  }
   return (
     <div>
       <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
@@ -66,27 +107,31 @@ function CreateChatModal({ handleClose }: Props) {
           fullWidth
           sx={{ marginBottom: 1 }}
           id="standard-basic"
-          label="Group Name"
+          label="Search user"
           variant="standard"
           placeholder="Add Users e.g: Sunil, Ajay"
           onChange={onSearch}
         />
         <br />
-        <Chip
-          label="Clickable Deletable"
-          variant="outlined"
-          onClick={() => console.log('test')}
-          onDelete={() => console.log('delete')}
-        />
-        <Chip
-          label="Clickable Deletable"
-          variant="outlined"
-          onClick={() => console.log('test')}
-          onDelete={() => console.log('delete')}
-        />
+        {groupDetails.users.map((selectedUserList) => (
+          <Chip
+            label={selectedUserList.name}
+            variant="outlined"
+            onClick={() => console.log('test')}
+            onDelete={() => console.log('delete')}
+          />
+        ))}
+        <List>
+          {searchValue &&
+            searchedUser.map((list: any) => (
+              <ListItem onClick={(event) => handleClickList(event, list)}>
+                {list.name}
+              </ListItem>
+            ))}
+        </List>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={handleClose}>
+        <Button autoFocus onClick={handleCreateGroup}>
           Create Group
         </Button>
       </DialogActions>
