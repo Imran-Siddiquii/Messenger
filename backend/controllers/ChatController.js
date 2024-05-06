@@ -74,7 +74,8 @@ const createGroupChat = async (req, res) => {
   if (!req.body.name || !req.body.users) {
     res.status(401).json({ message: 'Please fill all the fields' });
   }
-  const users = JSON.parse(req.body.users);
+  const users = req.body.users;
+
 
   if (users.length < 2) {
     res

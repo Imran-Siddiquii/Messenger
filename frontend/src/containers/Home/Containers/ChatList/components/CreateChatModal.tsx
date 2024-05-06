@@ -3,13 +3,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import {
-  Button,
-  Chip,
-  List,
-  ListItem,
-  TextField,
-} from '@mui/material';
+import { Button, Chip, List, ListItem, TextField } from '@mui/material';
 import React from 'react';
 import { debounce } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,16 +12,17 @@ import {
   selectSearchUserData,
   selectSearchValue,
 } from '../../Header/slice/selector';
+import { createGroupChat } from '../slice';
 interface Props {
   handleClose: () => void;
 }
 interface UserDetails {
-  group_name: string;
+  name: string;
   users: string[];
 }
 function CreateChatModal({ handleClose }: Props) {
   const [groupDetails, setGroupDetails] = React.useState<UserDetails>({
-    group_name: '',
+    name: '',
     users: [],
   });
   const dispatch = useDispatch();
@@ -58,23 +53,38 @@ function CreateChatModal({ handleClose }: Props) {
   );
 
   const handleClickList = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>,
     list: any,
   ) => {
     event.preventDefault();
-    setGroupDetails((pre) => {
-      return {
-        ...pre,
-        users: [...pre.users, list],
-      };
+    setGroupDetails((prev) => {
+      // Check if the list already exists in the users array
+      if (!prev.users.some((user) => user._id === list._id)) {
+        // If not, add the list to the users array
+        return {
+          ...prev,
+          users: [...prev.users, list],
+        };
+      }
+      // If the list already exists, return the previous state
+      return prev;
     });
   };
 
-  console.log('🚀 ~ CreateChatModal ~ groupDetails:', groupDetails);
+  const handleCreateGroup = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.preventDefault();
 
-  const handleCreateGroup=()=>{
-    console.log('🚀 ~ CreateChatModal ~ groupDetails:', groupDetails);
-  }
+    dispatch(
+      createGroupChat({
+        value: {
+          name: groupDetails.name,
+          users: groupDetails.users.map((userList: any) => userList._id),
+        },
+      }),
+    );
+  };
   return (
     <div>
       <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
@@ -99,7 +109,7 @@ function CreateChatModal({ handleClose }: Props) {
           id="standard-basic"
           label="Group Name"
           variant="standard"
-          name="group_name"
+          name="name"
           onChange={handleChange}
         />
         <br />
@@ -131,7 +141,11 @@ function CreateChatModal({ handleClose }: Props) {
         </List>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={handleCreateGroup}>
+        <Button
+          onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+            handleCreateGroup(event)
+          }
+        >
           Create Group
         </Button>
       </DialogActions>

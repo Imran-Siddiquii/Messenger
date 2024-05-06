@@ -8,11 +8,13 @@ import React, { useEffect } from 'react';
 
 const ChatBox = () => {
   const selectChat = useSelector(selectSelectedChat);
+  console.log("🚀 ~ ChatBox ~ selectChat:", selectChat)
   const [chat, setChat] = React.useState<any>();
   useEffect(() => {
     setChat(selectChat);
   }, [selectChat]);
 
+  console.log("🚀 ~ ChatBox ~ chat:", chat)
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <div

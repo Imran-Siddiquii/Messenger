@@ -5,6 +5,9 @@ import {
   userChatListFailed,
   accessChat,
   accessChatSuccessful,
+  createGroupChat,
+  createGroupChatFailed,
+  createGroupChatSuccessful,
 } from './index'; // Assuming you have another action to watch for
 import { apiRequest } from '../../../../../utils/apiRequest';
 import { searchUserEmpty } from '../../Header/slice';
@@ -41,10 +44,31 @@ function* accessChatWorker(action: any): Generator<any, void, any> {
   }
 }
 
+
+// create group chat list request
+function* createGroupChatWorker(action: any): Generator<any, void, any> {
+  console.log("🚀 ~ function*createGroupChatWorker ~ action:", action.payload.value);
+  try {
+    const result = yield call(
+      apiRequest,
+      'POST',
+      'user/chat/group',
+      action.payload.value,
+      null,
+    );
+    const response = yield call(convertToJson, result); // Assuming payload contains login credentials
+    yield put(createGroupChatSuccessful({ value: response }));
+  } catch (error) {
+    console.log(error);
+    yield put(createGroupChatFailed({ value: true }));
+  }
+}
+
 function* chatListSaga() {
   yield all([
     takeLatest(fetchUserChatList.type, userChatListWorker),
     takeLatest(accessChat.type, accessChatWorker),
+    takeLatest(createGroupChat.type, createGroupChatWorker),
   ]);
 }
 

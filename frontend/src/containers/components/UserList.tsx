@@ -1,10 +1,35 @@
 import { Box, Typography } from '@mui/material';
+import { getUser } from '../../utils';
 
 interface Props {
   handleAccessChat?: (id: string) => void | undefined;
   user: any;
 }
 const UserList = ({ user, handleAccessChat }: Props) => {
+  const getUserList = (list: any) => {
+    console.log("🚀 ~ getUserList ~ list:", list)
+    
+    if (list?.users[0].id == getUser().id) {
+      return (
+        <>
+          <Typography variant="h5">{user.users[1]?.name}</Typography>
+          <Typography component="span" fontWeight={600}>
+            Number : {list.users[1]?.phone_number}
+          </Typography>
+        </>
+      );
+    }
+    return (
+      <>
+        <Typography variant="h5">{user.users[1]?.name}</Typography>
+        <Typography component="span" fontWeight={600}>
+          Number : {list.users[1]?.phone_number}
+        </Typography>
+      </>
+    );
+  };
+
+  console.log('username', user);
   return (
     <Box
       mt={1}
@@ -28,10 +53,13 @@ const UserList = ({ user, handleAccessChat }: Props) => {
           overflowY: 'auto',
         }}
       >
-        <Typography variant="h5">{user?.name}</Typography>
-        <Typography component="span" fontWeight={600}>
-          Number : {user?.phone_number}
-        </Typography>
+        {!user.isGroupChat ? (
+          getUserList(user)
+        ) : (
+          <Typography component="span" fontWeight={600}>
+            {user?.chat}
+          </Typography>
+        )}
       </Box>
     </Box>
   );

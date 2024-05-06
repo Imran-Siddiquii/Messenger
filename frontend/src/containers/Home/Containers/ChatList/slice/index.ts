@@ -58,6 +58,39 @@ const chatList = createSlice({
       state.loading = false;
       state.error = action.payload.value;
     },
+
+    createGroupChat: (
+      state: ChatListType,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _action: PayloadAction<{ value: { name: string; users: any[] } }>,
+    ) => {
+      state.loading = true;
+    },
+    createGroupChatSuccessful: (
+      state: ChatListType,
+      action: PayloadAction<{ value: any[] }>,
+    ) => {
+      state.loading = false;
+      state.selectedUserChat = action.payload.value[0];
+      const existingIndex = state.chatList.findIndex(
+        (user) => user._id === action.payload.value._id,
+      );
+
+      if (existingIndex !== -1) {
+        // Remove the existing user
+        state.chatList.splice(existingIndex, 1);
+      }
+
+      // Add the user to the beginning of the list
+      state.chatList = [action.payload.value[0], ...state.chatList];
+    },
+    createGroupChatFailed: (
+      state: ChatListType,
+      action: PayloadAction<{ value: boolean }>,
+    ) => {
+      state.loading = false;
+      state.error = action.payload.value;
+    },
   },
 });
 
@@ -68,6 +101,9 @@ export const {
   userChatListFailed,
   accessChat,
   accessChatSuccessful,
+  createGroupChat,
+  createGroupChatSuccessful,
+  createGroupChatFailed,
 } = chatList.actions;
 
 export default chatList.reducer;

@@ -5,8 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserChatList, selectedChat } from './slice';
 import { selectChatList, selectChatListLoading } from './slice/selector';
 import UserList from '../../../components/UserList';
-import { getUser } from '../../../../utils';
-// import UserList from '../../../components/UserList';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import CreateChatModal from './components/CreateChatModal';
@@ -38,15 +36,9 @@ function ChatList() {
       setOpenModal(false);
     };
   const userList = (list: any) => {
-    let check;
-    if (list.users[0].id == getUser().id) {
-      check = list.users[1];
-    } else {
-      check = list.users[0];
-    }
     return (
       <Box onClick={() => handleAccessChat(list)}>
-        <UserList user={check} key={check._id} />
+        <UserList user={list} key={list._id} />
       </Box>
     );
   };
