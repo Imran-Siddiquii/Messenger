@@ -91,6 +91,9 @@ const chatList = createSlice({
       state.loading = false;
       state.error = action.payload.value;
     },
+    makeSelectedChatEmpty: (state: ChatListType) => {
+      state.selectedUserChat = {};
+    },
   },
 });
 
@@ -104,6 +107,7 @@ export const {
   createGroupChat,
   createGroupChatSuccessful,
   createGroupChatFailed,
+  makeSelectedChatEmpty,
 } = chatList.actions;
 
 export default chatList.reducer;
