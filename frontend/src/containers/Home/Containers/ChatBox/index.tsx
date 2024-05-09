@@ -8,11 +8,17 @@ import React, { useEffect } from 'react';
 import { Box } from '@mui/material';
 import { ArrowBackRounded, VisibilityOutlined } from '@mui/icons-material';
 import { makeSelectedChatEmpty } from '../ChatList/slice';
+import SelectedChatInfo from './components/SelectedChatInfo';
 
 const ChatBox = () => {
   const selectChat = useSelector(selectSelectedChat);
   const dispatch = useDispatch();
   const [chat, setChat] = React.useState<any>();
+  const [counter, setCount] = React.useState(0);
+  const [value, setValue] = React.useState('');
+  console.log('🚀 ~ ChatBox ~ counter:', counter);
+  const [showSelectedChatInfo, setShowSelectedChatInfo] =
+    React.useState<boolean>(false);
   useEffect(() => {
     setChat(selectChat);
   }, [selectChat]);
@@ -22,10 +28,8 @@ const ChatBox = () => {
     dispatch(makeSelectedChatEmpty());
   };
 
-  const showSelectChatDetails=()=>{
-    console.log('eeeeeeeeeee');
-    
-  }
+  const showSelectChatDetails = () => setShowSelectedChatInfo(true);
+  const handleClose = () => setShowSelectedChatInfo(false);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {Object.keys(selectChat).length > 0 ? (
@@ -95,16 +99,23 @@ const ChatBox = () => {
               placeholder="Type a message..."
               fullWidth
               sx={{ mr: 1 }}
+              onChange={(event) => setValue(event.target.value)}
             />
             <IconButton>
               <InsertEmoticonIcon />
             </IconButton>
-            <IconButton>
+            <IconButton
+              onClick={() => {
+                console.log('hello');
+                setCount((pre) => pre + 1);
+              }}
+            >
               <SendIcon />
             </IconButton>
           </div>
         </>
       ) : null}
+      <SelectedChatInfo open={showSelectedChatInfo} handleClose={handleClose} />
     </div>
   );
 };
