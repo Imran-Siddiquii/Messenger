@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ChatListType } from './types';
+import { getUser } from '../../../../../utils';
 
 export const initialState: ChatListType = {
   loading: false,
@@ -18,7 +19,33 @@ const chatList = createSlice({
       state: ChatListType,
       action: PayloadAction<{ user: any }>,
     ) => {
-      state.selectedUserChat = action.payload.user;
+      let { user } = action.payload;
+      const chatsUser = user.users.filter(
+        (list: any) => list._id !== getUser()._id,
+      );
+      if (user.isGroupChat) {
+        user = {
+          ...user,
+          chatName: user.chat,
+          users: chatsUser,
+        };
+      } else {
+        user = {
+          ...user,
+          chatName: chatsUser[0].name,
+          users: chatsUser,
+        };
+      }
+      const existingIndex = state.chatList.findIndex(
+        (users) => users._id === user._id,
+      );
+
+      if (existingIndex !== -1) {
+        // Remove the existing user
+        state.chatList.splice(existingIndex, 1);
+      }
+      state.chatList = [action.payload.user, ...state.chatList];
+      state.selectedUserChat = user;
     },
     accessChatSuccessful: (
       state: ChatListType,

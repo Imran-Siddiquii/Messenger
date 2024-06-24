@@ -12,7 +12,7 @@ export const selectError = createSelector(
   (auth) => auth.error,
 );
 
-export const selectUserToken = createSelector(selectAuthState, (auth) => auth.token);
+export const selectUserToken = createSelector(selectAuthState, (auth) => auth?.token);
 export const selectUser = createSelector(selectAuthState, (auth) => auth.user);
 
 export const selectMessage = createSelector(

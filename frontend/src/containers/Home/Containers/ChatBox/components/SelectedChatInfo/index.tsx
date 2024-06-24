@@ -7,8 +7,8 @@ import {
   DialogTitle,
 } from '@mui/material';
 import { SelectedChatInfoProps } from '../../types';
-import React, { memo } from 'react';
-const SelectChatInfo: React.FC<SelectedChatInfoProps> = memo(
+import React from 'react';
+const SelectChatInfo: React.FC<SelectedChatInfoProps> = React.memo(
   function SelectedChatInfo({ open, handleClose }) {
     console.log('render user UI ');
 
@@ -30,7 +30,7 @@ const SelectChatInfo: React.FC<SelectedChatInfoProps> = memo(
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Disagree</Button>
+            <Button onClick={handleClose}>Add</Button>
             <Button autoFocus onClick={handleClose}>
               Agree
             </Button>

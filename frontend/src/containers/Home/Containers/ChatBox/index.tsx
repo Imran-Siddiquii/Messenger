@@ -5,7 +5,7 @@ import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectSelectedChat } from '../ChatList/slice/selector';
 import React, { useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { ArrowBackRounded, VisibilityOutlined } from '@mui/icons-material';
 import { makeSelectedChatEmpty } from '../ChatList/slice';
 import SelectedChatInfo from './components/SelectedChatInfo';
@@ -16,14 +16,12 @@ const ChatBox = () => {
   const [chat, setChat] = React.useState<any>();
   const [counter, setCount] = React.useState(0);
   const [value, setValue] = React.useState('');
-  console.log('🚀 ~ ChatBox ~ counter:', counter);
   const [showSelectedChatInfo, setShowSelectedChatInfo] =
     React.useState<boolean>(false);
   useEffect(() => {
     setChat(selectChat);
   }, [selectChat]);
 
-  console.log('🚀 ~ ChatBox ~ selectChat:', selectChat);
   const handleBackClick = () => {
     dispatch(makeSelectedChatEmpty());
   };
@@ -60,9 +58,17 @@ const ChatBox = () => {
                   <ArrowBackRounded />
                 </IconButton>
               </Box>
-              <Box pl={2} pr={2} fontWeight={500} fontSize="1.5rem">
+              <Box pl={2} pr={2}>
                 {chat && Object.keys(chat).length > 0 && (
-                  <div>{chat?.users[1]?.name}</div>
+                  <>
+                    <Typography fontWeight={500} fontSize="1.5rem">
+                      {chat?.chatName}
+                    </Typography>
+                    <Typography fontSize="0.8rem">
+                      {chat.isGroupChat &&
+                        chat.users.map(({ name }: any) => name + ',')}
+                    </Typography>
+                  </>
                 )}
               </Box>
               <Box ml={'auto'} onClick={showSelectChatDetails}>
