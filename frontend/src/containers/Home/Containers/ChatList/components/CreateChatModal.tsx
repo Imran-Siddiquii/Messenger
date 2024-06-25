@@ -59,7 +59,7 @@ function CreateChatModal({ handleClose }: Props) {
     event.preventDefault();
     setGroupDetails((prev) => {
       // Check if the list already exists in the users array
-      if (!prev.users.some((user) => user._id === list._id)) {
+      if (!prev.users.some((user: any) => user?._id === list._id)) {
         // If not, add the list to the users array
         return {
           ...prev,

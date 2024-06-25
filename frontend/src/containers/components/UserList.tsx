@@ -7,14 +7,14 @@ interface Props {
 }
 const UserList = ({ user, handleAccessChat }: Props) => {
   const getUserList = (list: any) => {
-    console.log("🚀 ~ getUserList ~ list:", list)
-    
-    if (list?.users[0].id == getUser().id) {
+    if (list?.users && list?.users[0]?.id == getUser().id) {
       return (
         <>
-          <Typography variant="h5">{user.users[1]?.name}</Typography>
+          <Typography variant="h5">
+            {list?.users && user.users[1]?.name}
+          </Typography>
           <Typography component="span" fontWeight={600}>
-            Number : {list.users[1]?.phone_number}
+            Number : {list?.users && list.users[1]?.phone_number}
           </Typography>
         </>
       );

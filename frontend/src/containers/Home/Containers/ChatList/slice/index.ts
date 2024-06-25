@@ -95,7 +95,7 @@ const chatList = createSlice({
     },
     createGroupChatSuccessful: (
       state: ChatListType,
-      action: PayloadAction<{ value: any[] }>,
+      action: PayloadAction<{ value: any }>,
     ) => {
       state.loading = false;
       state.selectedUserChat = action.payload.value[0];

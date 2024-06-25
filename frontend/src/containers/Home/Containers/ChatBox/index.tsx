@@ -14,8 +14,6 @@ const ChatBox = () => {
   const selectChat = useSelector(selectSelectedChat);
   const dispatch = useDispatch();
   const [chat, setChat] = React.useState<any>();
-  const [counter, setCount] = React.useState(0);
-  const [value, setValue] = React.useState('');
   const [showSelectedChatInfo, setShowSelectedChatInfo] =
     React.useState<boolean>(false);
   useEffect(() => {
@@ -105,7 +103,7 @@ const ChatBox = () => {
               placeholder="Type a message..."
               fullWidth
               sx={{ mr: 1 }}
-              onChange={(event) => setValue(event.target.value)}
+              onChange={(event) => console.log(event.target.value)}
             />
             <IconButton>
               <InsertEmoticonIcon />
@@ -113,7 +111,6 @@ const ChatBox = () => {
             <IconButton
               onClick={() => {
                 console.log('hello');
-                setCount((pre) => pre + 1);
               }}
             >
               <SendIcon />
@@ -121,7 +118,11 @@ const ChatBox = () => {
           </div>
         </>
       ) : null}
-      <SelectedChatInfo open={showSelectedChatInfo} handleClose={handleClose} />
+      <SelectedChatInfo
+        selectUserChat={selectChat}
+        open={showSelectedChatInfo}
+        handleClose={handleClose}
+      />
     </div>
   );
 };

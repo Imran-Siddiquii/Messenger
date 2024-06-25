@@ -68,6 +68,7 @@ function Auth() {
   }, [userToken]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    event.preventDefault()
     setValue(newValue);
   };
 
