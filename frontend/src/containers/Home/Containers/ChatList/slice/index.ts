@@ -17,13 +17,14 @@ const chatList = createSlice({
     },
     selectedChat: (
       state: ChatListType,
-      action: PayloadAction<{ user: any }>,
+      action: PayloadAction<{ user: any; updateGroup?: boolean }>,
     ) => {
       let { user } = action.payload;
+      const { updateGroup } = action.payload;
       const chatsUser = user.users.filter(
         (list: any) => list._id !== getUser()._id,
       );
-      if (user.isGroupChat) {
+      if (user.isGroupChat && !updateGroup) {
         user = {
           ...user,
           chatName: user.chat,
@@ -45,6 +46,14 @@ const chatList = createSlice({
         state.chatList.splice(existingIndex, 1);
       }
       state.chatList = [action.payload.user, ...state.chatList];
+      
+      if (updateGroup) {
+        user = {
+          ...state.selectedUserChat,
+          chat: user.chat,
+          chatName: user.chat,
+        };
+      }
       state.selectedUserChat = user;
     },
     accessChatSuccessful: (
