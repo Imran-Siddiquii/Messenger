@@ -6,6 +6,7 @@ import {
   fetchChat,
   removeGroupMember,
   renameGroup,
+  deleteGroup,
 } from '../controllers/ChatController.js';
 import { authVerify } from '../middlewares/authVerify.js';
 
@@ -18,5 +19,6 @@ chatRoutes.post('/group', authVerify, createGroupChat);
 chatRoutes.post('/group/add-member', authVerify, addGroupMember);
 chatRoutes.post('/group/remove-member', authVerify, removeGroupMember);
 chatRoutes.post('/group/rename', authVerify, renameGroup);
+chatRoutes.delete('/group/delete',authVerify,deleteGroup);
 
 export default chatRoutes;

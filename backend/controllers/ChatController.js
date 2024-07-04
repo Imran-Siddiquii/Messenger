@@ -150,8 +150,28 @@ const renameGroup = async (req, res) => {
     { chat: chatName },
     { new: true }
   );
-
   res.send(updated);
+};
+
+const deleteGroup = async (req, res) => {
+  const { groupId } = req.body;
+
+  try {
+    console.log(req.user._id, 'user id');
+
+    const deletedChat = await Chat.findOneAndDelete({ _id: groupId });
+
+    if (!deletedChat) {
+      return res.status(404).json({ message: 'Chat not found' });
+    }
+
+    res.status(200).json({ message: 'Chat deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting chat:', error);
+    res
+      .status(500)
+      .json({ message: 'An error occurred while deleting the chat' });
+  }
 };
 export {
   accessChat,
@@ -160,4 +180,5 @@ export {
   addGroupMember,
   removeGroupMember,
   renameGroup,
+  deleteGroup,
 };

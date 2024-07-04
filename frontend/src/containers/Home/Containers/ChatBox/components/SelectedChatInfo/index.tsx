@@ -26,10 +26,8 @@ import React from 'react';
 import { Check, Clear, Close } from '@mui/icons-material';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useDispatch, useSelector } from 'react-redux';
-import { groupRenameInitail } from '../../slice';
-import {
-  selectChatboxLoading,
-} from '../../slice/selectors';
+import { groupDeleteInitail, groupRenameInitail } from '../../slice';
+import { selectChatboxLoading } from '../../slice/selectors';
 
 const SelectedChatInfo: React.FC<SelectedChatInfoProps> = ({
   open,
@@ -57,6 +55,13 @@ const SelectedChatInfo: React.FC<SelectedChatInfoProps> = ({
     setAnchorEl(null);
     setRenameGroupFlag(true);
   };
+
+  const handlDeleteGroup = (event: React.MouseEvent<HTMLElement>): void => {
+    event.preventDefault();
+    dispatch(groupDeleteInitail());
+    setAnchorEl(null);
+    handleClose();
+  };
   const isMenuOpen = Boolean(anchorEl);
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -76,7 +81,7 @@ const SelectedChatInfo: React.FC<SelectedChatInfoProps> = ({
       onClose={() => setAnchorEl(null)}
     >
       <MenuItem onClick={handleRenameGroup}>Rename</MenuItem>
-      <MenuItem>Delete</MenuItem>
+      <MenuItem onClick={handlDeleteGroup}>Delete</MenuItem>
     </Menu>
   );
 
@@ -146,10 +151,7 @@ const SelectedChatInfo: React.FC<SelectedChatInfoProps> = ({
                     }
                     name="chatName"
                     value={renameGroup}
-                    onChange={(event) => {
-                      setRenameGroup(event.target.value);
-                      console.log(event.target.value, event.target.name);
-                    }}
+                    onChange={(event) => setRenameGroup(event.target.value)}
                     label="Group name"
                   />
                 </FormControl>

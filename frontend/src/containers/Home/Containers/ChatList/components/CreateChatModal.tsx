@@ -125,7 +125,7 @@ function CreateChatModal({ handleClose }: Props) {
         <br />
         {groupDetails.users.map((selectedUserList) => (
           <Chip
-            label={selectedUserList.name}
+            label={selectedUserList?.name}
             variant="outlined"
             onClick={() => console.log('test')}
             onDelete={() => console.log('delete')}

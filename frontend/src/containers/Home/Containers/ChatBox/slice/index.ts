@@ -40,9 +40,39 @@ const ChatboxSlice = createSlice({
       };
       return state;
     },
+    groupDeleteInitail: (state: ChatBoxStateType) => {
+      state = {
+        loading: true,
+        error: false,
+        message: '',
+      };
+      return state;
+    },
+    groupDeleteSuccess: (state: ChatBoxStateType) => {
+      state = {
+        loading: false,
+        error: false,
+        message: 'Group name has been Deleted.',
+      };
+      return state;
+    },
+    groupDeleteError: (state: ChatBoxStateType) => {
+      state = {
+        loading: false,
+        error: true,
+        message: 'Please try again!',
+      };
+      return state;
+    },
   },
 });
 
-export const { groupRenameInitail, groupRenameSuccess, groupRenameError } =
-  ChatboxSlice.actions;
+export const {
+  groupRenameInitail,
+  groupRenameSuccess,
+  groupRenameError,
+  groupDeleteInitail,
+  groupDeleteSuccess,
+  groupDeleteError,
+} = ChatboxSlice.actions;
 export default ChatboxSlice.reducer;

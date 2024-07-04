@@ -130,6 +130,19 @@ const chatList = createSlice({
     makeSelectedChatEmpty: (state: ChatListType) => {
       state.selectedUserChat = {};
     },
+    removeChat: (
+      state: ChatListType,
+      action: PayloadAction<{ id: string }>,
+    ) => {
+      const { id } = action.payload;
+      console.log('🚀 ~ id:', id);
+      const updateChatList = state.chatList.filter(
+        ({ _id }: { _id: string }) => _id != id,
+      );
+      console.log('🚀 ~ updateChatList:', updateChatList);
+      state.selectedUserChat = {};
+      state.chatList = updateChatList;
+    },
   },
 });
 
@@ -144,6 +157,7 @@ export const {
   createGroupChatSuccessful,
   createGroupChatFailed,
   makeSelectedChatEmpty,
+  removeChat,
 } = chatList.actions;
 
 export default chatList.reducer;
