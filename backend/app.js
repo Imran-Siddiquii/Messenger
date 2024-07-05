@@ -5,6 +5,7 @@ import colors from 'colors';
 import authRouter from './routes/Auth.route.js';
 import userRoutes from './routes/User.route.js';
 import chatRoutes from './routes/Chat.route.js';
+import messageRoutes from './routes/Message.route.js';
 initializeDatabase();
 const app = express();
 app.use(json());
@@ -14,6 +15,7 @@ const PORT = process.env.PORT || 3000;
 app.use('/api/v1', authRouter);
 app.use('/api/v1', userRoutes);
 app.use('/api/v1/user/chat', chatRoutes);
+app.use('/api/v1/message', messageRoutes)
 app.listen(PORT, () =>
   console.log(`Server Started On ${PORT}`.underline.bold.bgBlue)
 );
