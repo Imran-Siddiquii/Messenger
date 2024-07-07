@@ -16,3 +16,8 @@ export const selectChatboxMessage = createSelector(
   selectAuthState,
   (chatBox) => chatBox.message,
 );
+
+export const selectChatboxData = createSelector(
+  selectAuthState,
+  (chatBox) => chatBox.Data,
+);

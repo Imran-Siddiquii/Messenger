@@ -5,6 +5,7 @@ const initialState: ChatBoxStateType = {
   loading: false,
   message: '',
   error: false,
+  data: [],
 };
 const ChatboxSlice = createSlice({
   name: 'chat-box',
@@ -21,6 +22,7 @@ const ChatboxSlice = createSlice({
         loading: true,
         error: false,
         message: '',
+        data: state.data,
       };
       return state;
     },
@@ -29,6 +31,7 @@ const ChatboxSlice = createSlice({
         loading: false,
         error: false,
         message: 'Group name has been updated.',
+        data: state.data,
       };
       return state;
     },
@@ -37,6 +40,7 @@ const ChatboxSlice = createSlice({
         loading: false,
         error: true,
         message: 'Please try again!',
+        data: state.data,
       };
       return state;
     },
@@ -45,6 +49,7 @@ const ChatboxSlice = createSlice({
         loading: true,
         error: false,
         message: '',
+        data: state.data,
       };
       return state;
     },
@@ -53,6 +58,7 @@ const ChatboxSlice = createSlice({
         loading: false,
         error: false,
         message: 'Group name has been Deleted.',
+        data: state.data,
       };
       return state;
     },
@@ -61,6 +67,70 @@ const ChatboxSlice = createSlice({
         loading: false,
         error: true,
         message: 'Please try again!',
+        data: state.data,
+      };
+      return state;
+    },
+    fetchMessages: (state: ChatBoxStateType) => {
+      state = {
+        ...state,
+        loading: true,
+        error: false,
+      };
+      return state;
+    },
+    fetchMessagesSuccess: (
+      state: ChatBoxStateType,
+      action: PayloadAction<{ data: [] }>,
+    ) => {
+      state = {
+        loading: false,
+        error: false,
+        message: '',
+        data: action.payload.data,
+      };
+      return state;
+    },
+    fetchMessagesError: (state: ChatBoxStateType) => {
+      state = {
+        loading: false,
+        error: true,
+        message: 'Please try again!',
+        data: state.data,
+      };
+      return state;
+    },
+
+    sendMessage: (
+      state: ChatBoxStateType,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      _action: PayloadAction<{ text: string }>,
+    ) => {
+      state = {
+        ...state,
+        loading: true,
+        error: false,
+      };
+      return state;
+    },
+    sendMessageSuccess: (
+      state: ChatBoxStateType,
+      action: PayloadAction<{ data: any }>,
+    ) => {
+      state = {
+        loading: false,
+        error: false,
+        message: '',
+        data: [...state.data, action.payload.data],
+      };
+      return state;
+    },
+    sendMessageError: (state: ChatBoxStateType) => {
+      state = {
+        loading: false,
+        error: true,
+        message: 'Please try again!',
+        data: state.data,
       };
       return state;
     },
@@ -74,5 +144,11 @@ export const {
   groupDeleteInitail,
   groupDeleteSuccess,
   groupDeleteError,
+  fetchMessages,
+  fetchMessagesSuccess,
+  fetchMessagesError,
+  sendMessage,
+  sendMessageSuccess,
+  sendMessageError,
 } = ChatboxSlice.actions;
 export default ChatboxSlice.reducer;

@@ -25,7 +25,6 @@ const sendMessage = async (req, res) => {
     res.status(201).send(message);
   } catch (error) {
     res.status(400);
-    throw new Error(error.message);
   }
 };
 
@@ -38,7 +37,6 @@ const fetchAllMessages = async (req, res) => {
     res.status(200).send(messages);
   } catch (error) {
     res.status(400);
-    throw new Error(error.message);
   }
 };
 

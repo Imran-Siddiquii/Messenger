@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { SignInFormType } from '../Auth/types';
 import { useDispatch } from 'react-redux';
 import { signIn } from '../Auth/slice';
@@ -32,7 +32,7 @@ const SignIn = () => {
     event.preventDefault();
   };
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     const { name, value } = event.target;
     setFormdata((pre) => ({
