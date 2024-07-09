@@ -11,13 +11,16 @@ import { makeSelectedChatEmpty } from '../ChatList/slice';
 import SelectedChatInfo from './components/SelectedChatInfo';
 import Background from '../../../../../public/ChatBackground.jpg';
 import { fetchMessages, sendMessage } from './slice';
+import { selectChatboxData } from './slice/selectors';
+import ScrollableMessage from './components/ScrollableMessage';
 const ChatBox = () => {
   const selectChat = useSelector(selectSelectedChat);
+  const messages = useSelector(selectChatboxData);
   const dispatch = useDispatch();
   const [chat, setChat] = React.useState<any>();
   const [showSelectedChatInfo, setShowSelectedChatInfo] =
     React.useState<boolean>(false);
-  const [sendText, setText] = React.useState<string>('');
+  const [sendText, setSendText] = React.useState<string>('');
 
   useEffect(() => {
     setChat(selectChat);
@@ -26,12 +29,13 @@ const ChatBox = () => {
 
   const handleText = (event: React.ChangeEvent<HTMLInputElement>): void => {
     event.preventDefault();
-    setText(event.target.value);
+    setSendText(event.target.value);
   };
 
   const sendTextHandle = (event: React.MouseEvent<HTMLButtonElement>): void => {
     event.preventDefault();
     if (sendText) {
+      setSendText('');
       dispatch(sendMessage({ text: sendText }));
     }
   };
@@ -114,15 +118,14 @@ const ChatBox = () => {
               backgroundPosition: 'center center',
             }}
           >
-            <div
+            <Box
               style={{
                 marginBottom: '8px',
                 color: '#ffff',
-                background: '#e29',
               }}
             >
-              messages
-            </div>
+              <ScrollableMessage messages={messages} />
+            </Box>
           </div>
           <div
             style={{
@@ -136,6 +139,7 @@ const ChatBox = () => {
               variant="outlined"
               placeholder="Type a message..."
               fullWidth
+              value={sendText}
               sx={{ mr: 1 }}
               onChange={handleText}
             />

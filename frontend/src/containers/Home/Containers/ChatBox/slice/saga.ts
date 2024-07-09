@@ -92,7 +92,7 @@ function* fetchMessageWorker(): Generator<any, void, any> {
 function* sendMessageWorker(
   action: PayloadAction<{ text: string }>,
 ): Generator<any, void, any> {
-  const selectedGroup = yield select(selectSelectedChat);;
+  const selectedGroup = yield select(selectSelectedChat);
   try {
     const result = yield call(
       apiRequest,

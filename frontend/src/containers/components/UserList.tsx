@@ -7,7 +7,7 @@ interface Props {
 }
 const UserList = ({ user, handleAccessChat }: Props) => {
   const getUserList = (list: any) => {
-    if (list?.users && list?.users[0]?.id == getUser().id) {
+    if (list?.users && list?.users[0]?.id == getUser()._id) {
       return (
         <>
           <Typography variant="h5">
@@ -29,7 +29,6 @@ const UserList = ({ user, handleAccessChat }: Props) => {
     );
   };
 
-  console.log('username', user);
   return (
     <Box
       mt={1}
