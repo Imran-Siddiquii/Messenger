@@ -3,4 +3,5 @@ export interface HeaderContainerType {
   data: any[];
   error: boolean;
   searchValue: string;
+  notification:any[];
 }

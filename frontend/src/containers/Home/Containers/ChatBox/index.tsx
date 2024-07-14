@@ -7,7 +7,7 @@ import { selectSelectedChat } from '../ChatList/slice/selector';
 import React, { useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import { ArrowBackRounded, VisibilityOutlined } from '@mui/icons-material';
-import { makeSelectedChatEmpty } from '../ChatList/slice';
+import { fetchUserChatList, makeSelectedChatEmpty } from '../ChatList/slice';
 import SelectedChatInfo from './components/SelectedChatInfo';
 import Background from '../../../../../public/ChatBackground.jpg';
 import { addNewMessage, fetchMessages, sendMessage } from './slice';
@@ -15,9 +15,12 @@ import { selectChatboxData } from './slice/selectors';
 import ScrollableMessage from './components/ScrollableMessage';
 import socket from '../../../../socket';
 import { getUser } from '../../../../utils';
+import { selectNotification } from '../Header/slice/selector';
+import { setNotification } from '../Header/slice';
 var selectedChatCompare: any;
 
 const ChatBox = () => {
+  const notification = useSelector(selectNotification);
   const selectChat = useSelector(selectSelectedChat);
   const messages = useSelector(selectChatboxData);
   const dispatch = useDispatch();
@@ -48,9 +51,14 @@ const ChatBox = () => {
         !selectedChatCompare ||
         selectedChatCompare._id !== newMessageReceived?.chat?._id
       ) {
-        console.log('🚀 ~ socket.on ~ newMessageReceived:inside if');
-
-        // give notificaiton
+        if (!notification.includes(newMessageReceived)) {
+          dispatch(
+            setNotification({
+              newNotification: [newMessageReceived, ...notification],
+            }),
+          );
+          // dispatch(fetchUserChatList({ value: true }));
+        }
       } else {
         dispatch(
           addNewMessage({ newMessage: [...messages, newMessageReceived] }),

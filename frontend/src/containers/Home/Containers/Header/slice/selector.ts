@@ -20,3 +20,8 @@ export const selectSearchUserData = createSelector(
   selectHeaderState,
   (header) => header.data,
 );
+
+export const selectNotification = createSelector(
+  selectHeaderState,
+  (header) => header.notification,
+);

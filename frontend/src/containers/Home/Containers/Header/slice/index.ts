@@ -6,6 +6,7 @@ export const initialState: HeaderContainerType = {
   data: [],
   error: false,
   searchValue: '',
+  notification: [],
 };
 const HeaderContainer = createSlice({
   name: 'headerContainer',
@@ -25,8 +26,11 @@ const HeaderContainer = createSlice({
       state.loading = false;
       state.data = action.payload.value;
     },
-    searchUserEmpty:(state:HeaderContainerType,action:PayloadAction<string>)=>{
-      state.searchValue=action.payload
+    searchUserEmpty: (
+      state: HeaderContainerType,
+      action: PayloadAction<string>,
+    ) => {
+      state.searchValue = action.payload;
     },
     searchUserFailed: (
       state: HeaderContainerType,
@@ -35,10 +39,21 @@ const HeaderContainer = createSlice({
       state.loading = false;
       state.error = action.payload.value;
     },
+    setNotification: (
+      state: HeaderContainerType,
+      action: PayloadAction<{ newNotification: any }>,
+    ) => {
+      state.notification = action.payload.newNotification;
+    },
   },
 });
 
-export const { searchUser, searchUserSuccessful, searchUserFailed, searchUserEmpty } =
-  HeaderContainer.actions;
+export const {
+  searchUser,
+  searchUserSuccessful,
+  searchUserFailed,
+  searchUserEmpty,
+  setNotification,
+} = HeaderContainer.actions;
 
 export default HeaderContainer.reducer;

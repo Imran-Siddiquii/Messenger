@@ -43,7 +43,6 @@ const SelectedChatInfo: React.FC<SelectedChatInfoProps> = ({
   const [showAlert, setShowAlert] = React.useState<boolean>(false);
   const loading = useSelector(selectChatboxLoading);
 
-  console.log('render user UI ', selectUserChat);
   const handleProfileMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
   ): void => {
@@ -190,7 +189,6 @@ const SelectedChatInfo: React.FC<SelectedChatInfoProps> = ({
                 placeholder="Search ... eg: Ajay"
                 name="search_user"
                 fullWidth
-                onChange={(event) => console.log(event.target.name)}
                 sx={{
                   margin: '10px 0',
                 }}

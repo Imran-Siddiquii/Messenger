@@ -127,8 +127,8 @@ function CreateChatModal({ handleClose }: Props) {
           <Chip
             label={selectedUserList?.name}
             variant="outlined"
-            onClick={() => console.log('test')}
-            onDelete={() => console.log('delete')}
+            // onClick={() => console.log('test')}
+            // onDelete={() => console.log('delete')}
           />
         ))}
         <List>

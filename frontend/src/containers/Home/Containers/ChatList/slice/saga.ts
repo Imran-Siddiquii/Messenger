@@ -47,7 +47,6 @@ function* accessChatWorker(action: any): Generator<any, void, any> {
 
 // create group chat list request
 function* createGroupChatWorker(action: any): Generator<any, void, any> {
-  console.log("🚀 ~ function*createGroupChatWorker ~ action:", action.payload.value);
   try {
     const result = yield call(
       apiRequest,

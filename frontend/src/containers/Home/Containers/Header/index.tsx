@@ -8,6 +8,7 @@ import {
   Badge,
   MenuItem,
   Menu,
+  MenuList,
 } from '@mui/material';
 // import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
@@ -17,8 +18,15 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import ProfileModal from './ProfileModal';
 import SearchBar from '../../../components/SearchBar';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectNotification } from './slice/selector';
+import { getSender, getUser } from '../../../../utils';
+import { setNotification } from './slice';
+import { selectedChat } from '../ChatList/slice';
 
 function Header() {
+  const notification = useSelector(selectNotification);
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [profileModal, setProfileModal] = React.useState<boolean>(false);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -28,6 +36,17 @@ function Header() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const [openDrawer, setOpenDrawer] = React.useState<boolean>(false);
+
+  const [anchorElNotification, setAnchorElNotification] =
+    React.useState<null | HTMLElement>(null);
+  const openNotification = Boolean(anchorElNotification);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorElNotification(event.currentTarget);
+  };
+
+  const handleNoticationClose = () => {
+    setAnchorElNotification(null);
+  };
 
   const handleProfileMenuOpen = (
     event: React.MouseEvent<HTMLElement>,
@@ -74,6 +93,44 @@ function Header() {
     </Menu>
   );
 
+  const renderNotification = (
+    <Menu
+      anchorEl={anchorElNotification}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      id="primary notication id"
+      keepMounted
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={openNotification}
+      onClose={handleNoticationClose}
+    >
+      <MenuList sx={{ padding: '10px' }}>
+        {!notification.length && 'No New Messages'}
+        {notification.map((notif: any) => (
+          <MenuItem
+            key={notif._id}
+            onClick={() => {
+              dispatch(selectedChat({ user: notif.chat }));
+              dispatch(
+                setNotification({
+                  newNotification: notification.filter((n: any) => n !== notif),
+                }),
+              );
+            }}
+          >
+            {notif.chat.isGroupChat
+              ? `New Message in ${notif.chat.chatName}`
+              : `New Message from ${getSender(getUser(), notif.chat.users)}`}
+          </MenuItem>
+        ))}
+      </MenuList>
+    </Menu>
+  );
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
@@ -130,10 +187,7 @@ function Header() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <SearchBar
-            openDrawer={openDrawer}
-            setOpenDrawer={setOpenDrawer}
-          />
+          <SearchBar openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
           <Box onClick={() => setOpenDrawer(true)}>
             <IconButton
               sx={{
@@ -163,8 +217,13 @@ function Header() {
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
+              id="basic-button"
+              aria-controls={openNotification ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={openNotification ? 'true' : undefined}
+              onClick={handleClick}
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={notification.length} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -196,6 +255,7 @@ function Header() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {renderNotification}
       <ProfileModal open={profileModal} handleClose={handleModalClose} />
     </Box>
   );

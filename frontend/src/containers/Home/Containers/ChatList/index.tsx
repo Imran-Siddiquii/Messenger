@@ -26,7 +26,7 @@ function ChatList() {
   // dispatch a fucntion to call api for user list
   React.useEffect(() => {
     dispatch(fetchUserChatList({ value: true }));
-  }, [dispatch]);
+  }, []);
 
   const handleAccessChat = (chat: any) => {
     dispatch(selectedChat({ user: chat }));

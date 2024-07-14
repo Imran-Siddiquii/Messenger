@@ -157,8 +157,6 @@ const deleteGroup = async (req, res) => {
   const { groupId } = req.body;
 
   try {
-    console.log(req.user._id, 'user id');
-
     const deletedChat = await Chat.findOneAndDelete({ _id: groupId });
 
     if (!deletedChat) {
