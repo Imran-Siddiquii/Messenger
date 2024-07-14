@@ -16,6 +16,13 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { apiRequest } from '../../../../../utils/apiRequest';
 import { removeChat, selectedChat } from '../../ChatList/slice';
 import { selectSelectedChat } from '../../ChatList/slice/selector';
+import socket from '../../../../../socket';
+
+// socket stablish connection
+
+function emitSocketEvent(socket: any, event: string, payload: any) {
+  socket.emit(event, payload);
+}
 
 async function convertToJson(response: any) {
   return await response.json();
@@ -81,6 +88,17 @@ function* fetchMessageWorker(): Generator<any, void, any> {
     const response = yield call(convertToJson, result);
     if (result.status === 200) {
       yield put(fetchMessagesSuccess({ data: response }));
+      try {
+        const channel = yield call(
+          emitSocketEvent,
+          socket,
+          'join-chat',
+          selectedGroup._id,
+        );
+        console.log('🚀 ~ function*fetchMessageWorker ~ channel:', channel);
+      } catch (error) {
+        console.error('Error joining chat room:', error);
+      }
     } else {
       yield put(fetchMessagesError(response));
     }
@@ -105,6 +123,18 @@ function* sendMessageWorker(
 
     if (result.status === 201) {
       yield put(sendMessageSuccess({ data: response }));
+
+      try {
+        const channel = yield call(
+          emitSocketEvent,
+          socket,
+          'new-message',
+          response,
+        );
+        console.log('🚀 ~ function*fetchMessageWorker ~ channel:', channel);
+      } catch (error) {
+        console.error('Error while send a messaga:', error);
+      }
     } else {
       yield put(sendMessageError(response));
     }

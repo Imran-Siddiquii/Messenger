@@ -134,6 +134,12 @@ const ChatboxSlice = createSlice({
       };
       return state;
     },
+    addNewMessage: (
+      state: ChatBoxStateType,
+      action: PayloadAction<{ newMessage: any[] }>,
+    ) => {
+      state.data = action.payload.newMessage;
+    },
   },
 });
 
@@ -150,5 +156,6 @@ export const {
   sendMessage,
   sendMessageSuccess,
   sendMessageError,
+  addNewMessage,
 } = ChatboxSlice.actions;
 export default ChatboxSlice.reducer;
